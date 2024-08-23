@@ -9,8 +9,7 @@ export async function registerUser(req, res) {
     const validator = vine.compile(RegisterSchema);
     const payload = await validator.validate(body);
 
-    const salt = bcrypt.genSaltSync(10);
-    payload.password = bcrypt.hashSync(payload.password, salt);
+    payload.password = await bcrypt.hash(payload.password, 10);
 
     const user = await prisma.user.create({
       data: payload,
@@ -22,7 +21,7 @@ export async function registerUser(req, res) {
   } catch (error) {
     console.log(error);
     if (error instanceof errors.E_VALIDATION_ERROR) {
-      return res.status(500).json(error.messages);
+      return res.status(400).json({ errors: error.messages });
     } else {
       return res.status(500).json({ error: "Internal server error" });
     }
