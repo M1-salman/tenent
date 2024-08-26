@@ -24,3 +24,8 @@ export const RegisterSchema = vine.object({
       confirmationField: "confirmPassword",
     }),
 });
+
+export const LoginSchema = vine.object({
+  email: vine.string().email(),
+  password: vine.string().minLength(1),
+});
