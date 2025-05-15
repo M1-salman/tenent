@@ -3,6 +3,7 @@ import vine, { errors, SimpleMessagesProvider } from "@vinejs/vine";
 import bcrypt from "bcryptjs";
 import { RegisterSchema, LoginSchema } from "../validations/auth.js";
 import { getUserByEmail } from "../data/user.js";
+import { generateToken } from "../utils/jwt.js";
 
 export async function registerUser(req, res) {
   try {
@@ -19,13 +20,42 @@ export async function registerUser(req, res) {
 
     payload.password = await bcrypt.hash(payload.password, 10);
 
-    const user = await prisma.user.create({
-      data: payload,
+    // Use transaction to create user and update total count
+    const result = await prisma.$transaction(async (tx) => {
+      // Create the user
+      const user = await tx.user.create({
+        data: payload,
+      });
+
+      // Get the current total users record or create if it doesn't exist
+      let totalUsers = await tx.totalUsers.findFirst();
+      
+      if (!totalUsers) {
+        // Create initial record if it doesn't exist
+        totalUsers = await tx.totalUsers.create({
+          data: {
+            count: 1
+          }
+        });
+      } else {
+        // Increment the count
+        totalUsers = await tx.totalUsers.update({
+          where: { id: totalUsers.id },
+          data: {
+            count: {
+              increment: 1
+            }
+          }
+        });
+      }
+
+      return { user, totalUsers };
     });
 
-    return res
-      .status(200)
-      .json({ success: "User created successfully!", payload });
+    return res.status(200).json({ 
+      success: "User created successfully!",
+      totalUsers: result.totalUsers.count 
+    });
   } catch (error) {
     console.log(error);
     if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -45,26 +75,30 @@ export async function loginUser(req, res) {
     });
     const payload = await validator.validate(body);
 
-    // const existingUser = await getUserByEmail(payload.email);
+    const existingUser = await getUserByEmail(payload.email);
 
-    // // display text if email is taken
-    // if (!existingUser) {
-    //   return res.status(400).json({ error: "Email does not exisit" });
-    // }
+    if (!existingUser) {
+      return res.status(400).json({ error: "Email does not exisit" });
+    }
 
-    // payload.password = await bcrypt.hash(payload.password, 10);
+    // Compare entered password with hashed password in database
+    const isPasswordValid = await bcrypt.compare(
+      payload.password,
+      existingUser.password
+    );
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: "Password is incorrect" });
+    }
 
-    // const user = await prisma.user.create({
-    //   data: payload,
-    // });
+    const token = generateToken(existingUser.id);
 
     return res
       .status(200)
-      .json({ success: "User login successfully!", payload });
+      .json({ success: "User login successfully!", token: token });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error instanceof errors.E_VALIDATION_ERROR) {
-      return res.status(400).json({ errors: error.messages });
+      return res.status(400).json({ error: "Invalid input" });
     } else {
       return res.status(500).json({ error: "Internal server error" });
     }
