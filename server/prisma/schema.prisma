@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -19,7 +20,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenants Tenant[] // Relation: One user can have many tenants
+  tenants      Tenant[] // Relation: One user can have many tenants
   totalTenants TotalTenants? // One-to-one relation with TotalTenants
 }
 
@@ -36,8 +37,8 @@ model Tenant {
   perUnit     Float?
   image       String?
   advance     Int
-  startDate   DateTime  
-  endDate     DateTime? 
+  startDate   DateTime
+  endDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -60,7 +61,3 @@ model TotalTenants {
 
   user User @relation(fields: [userId], references: [id])
 }
-
-
-
-
