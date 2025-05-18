@@ -115,7 +115,15 @@ export default function FeaturesSection() {
             style={{ minHeight: "80vh" }}
             role="listitem"
             aria-label={`Feature ${i + 1}: ${feature.heading}`}
+            aria-selected={activeIndex === i}
             tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setActiveIndex(i);
+                featureRefs.current[i]?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
             <Feature
               heading={feature.heading}
@@ -130,7 +138,7 @@ export default function FeaturesSection() {
         className="w-1/2 flex items-center justify-center"
         style={{ position: "sticky", top: 0, height: "120vh" }}
         role="complementary"
-        aria-label="Feature visualization"
+        aria-label={`Visualization for ${featuresData[activeIndex].heading}`}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -142,6 +150,7 @@ export default function FeaturesSection() {
             className="flex flex-col items-center justify-center"
             role="img"
             aria-label={`Visualization for ${featuresData[activeIndex].heading}`}
+            aria-live="polite"
           >
             {lottieData[activeIndex] ? (
               <Lottie

@@ -57,6 +57,12 @@ export const Navbar = () => {
 
   return (
     <header className="w-full bg-white py-16" role="banner">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-md"
+      >
+        Skip to main content
+      </a>
       <nav 
         ref={navRef}
         className="mx-auto max-w-4xl flex items-center justify-between px-6 rounded-full shadow-none"
@@ -100,7 +106,7 @@ export const Navbar = () => {
         </div>
         <div className="flex" role="menubar">
           <Link
-            to="/login"
+            to="/auth/login"
             className="mr-4 text-md font-medium ml-8"
             role="menuitem"
             aria-label="Log in to your account"
@@ -121,7 +127,7 @@ export const Navbar = () => {
             }}
           >
             <Link
-              to="/signup"
+              to="/auth/register"
               className={`ml-4 px-7 py-3.5 rounded-full bg-[#19171c] text-white font-semibold text-lg`}
               role="menuitem"
               aria-label="Sign up for a free trial"

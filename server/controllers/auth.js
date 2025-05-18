@@ -96,7 +96,6 @@ export async function loginUser(req, res) {
       .status(200)
       .json({ success: "User login successfully!", token: token });
   } catch (error) {
-    // console.log(error);
     if (error instanceof errors.E_VALIDATION_ERROR) {
       return res.status(400).json({ error: "Invalid input" });
     } else {

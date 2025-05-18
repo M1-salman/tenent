@@ -51,7 +51,7 @@ export default function Pricing() {
               }}
             >
               <Link
-                to="/signup"
+                to="/auth/register"
                 className="inline-block px-8 py-4 rounded-full bg-[#b593ff] text-black font-semibold text-lg shadow-md"
               >
                 Try for free

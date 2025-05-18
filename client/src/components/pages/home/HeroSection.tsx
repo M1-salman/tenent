@@ -7,8 +7,9 @@ export const HeroSection = () => {
 
   return (
     <section 
+      id="main-content"
       className="flex flex-col items-center text-center mt-8 min-h-[calc(100vh-8rem)]"
-      role="banner"
+      role="main"
       aria-label="Hero section"
     >
       <div 
@@ -21,7 +22,7 @@ export const HeroSection = () => {
         <span>simpler living</span>
       </div>
       <Link
-        to="/signup"
+        to="/auth/register"
         className={`px-12 py-4 rounded-full bg-[#b593ff] text-black font-semibold text-xl shadow-md transition-all duration-300 ${
           (isHovering || isFocused) ? 'scale-105' : 'scale-100'
         }`}
@@ -31,6 +32,7 @@ export const HeroSection = () => {
         onBlur={() => setIsFocused(false)}
         role="button"
         aria-label="Start your free trial with Tenent"
+        aria-haspopup="false"
         tabIndex={0}
         style={{
           transform: (isHovering || isFocused) ? 'scale(1.05)' : 'scale(1)',
