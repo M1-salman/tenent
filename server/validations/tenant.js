@@ -30,3 +30,16 @@ export const TenantSchema = vine.object({
   startDate: vine.date(),
   endDate: vine.date().optional(),
 });
+
+
+export const BillSchema = vine.object({
+  tenantId: vine.string(),
+  totalUnits: vine.number().min(0).optional(),
+  electricityBill: vine.number().min(0),
+  advance: vine.number().min(0),
+  arrears: vine.number().min(0),
+  startDate: vine.date(),
+  endDate: vine.date(),
+  billType: vine.string(),
+  total: vine.number().min(0),
+});

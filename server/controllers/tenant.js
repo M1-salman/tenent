@@ -1,6 +1,6 @@
 import prisma from "../lib/db.js";
 import vine, { errors } from "@vinejs/vine";
-import { TenantSchema } from "../validations/tenant.js";
+import { TenantSchema, BillSchema } from "../validations/tenant.js";
 
 export async function createTenant(req, res) {
   try {
@@ -20,7 +20,7 @@ export async function createTenant(req, res) {
 
       // Get or create TotalTenants record for this user
       let totalTenants = await tx.totalTenants.findUnique({
-        where: { userId: req.user.userId }
+        where: { userId: req.user.userId },
       });
 
       if (!totalTenants) {
@@ -28,8 +28,8 @@ export async function createTenant(req, res) {
         totalTenants = await tx.totalTenants.create({
           data: {
             userId: req.user.userId,
-            count: 1
-          }
+            count: 1,
+          },
         });
       } else {
         // Increment the count
@@ -37,9 +37,9 @@ export async function createTenant(req, res) {
           where: { userId: req.user.userId },
           data: {
             count: {
-              increment: 1
-            }
-          }
+              increment: 1,
+            },
+          },
         });
       }
 
@@ -49,7 +49,34 @@ export async function createTenant(req, res) {
     return res.status(201).json({
       success: "Tenant created successfully!",
       tenant: result.tenant,
-      totalTenants: result.totalTenants.count
+      totalTenants: result.totalTenants.count,
+    });
+  } catch (error) {
+    if (error instanceof errors.E_VALIDATION_ERROR) {
+      return res.status(400).json({ error: "Invalid input" });
+    } else {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+}
+
+export async function generateBill(req, res) {
+  try {
+    const body = req.body;
+    const validator = vine.compile(BillSchema);
+    const payload = await validator.validate(body);
+
+    const bill = await prisma.bill.create({
+      data: {
+        ...payload,
+        userId: req.user.userId,
+      },
+    });
+
+    return res.status(201).json({
+      success: "Bill generated successfully!",
+      bill: bill,
     });
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {

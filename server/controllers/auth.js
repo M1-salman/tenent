@@ -57,9 +57,8 @@ export async function registerUser(req, res) {
       totalUsers: result.totalUsers.count 
     });
   } catch (error) {
-    console.log(error);
     if (error instanceof errors.E_VALIDATION_ERROR) {
-      return res.status(400).json({ errors: error.messages });
+      return res.status(400).json({ error: "Invalid input" });
     } else {
       return res.status(500).json({ error: "Internal server error" });
     }
