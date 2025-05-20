@@ -2,10 +2,8 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
@@ -63,6 +61,11 @@ const Profile = () => {
     navigate("/auth/login");
   };
 
+  const handleGoToLogin = () => {
+    localStorage.removeItem("token");
+    navigate("/auth/login");
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -79,7 +82,7 @@ const Profile = () => {
             <FormError message={error} />
           </CardHeader>
           <CardFooter className="flex justify-center">
-            <Button onClick={() => navigate("/auth/login")} variant="default">
+            <Button onClick={handleGoToLogin} variant="default">
               Go to Login
             </Button>
           </CardFooter>
@@ -89,10 +92,18 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-20 items-center justify-center pt-32 px-8 landing" role="main" aria-label="User profile">
+    <div
+      className="flex flex-col space-y-20 items-center justify-center pt-32 px-8 landing"
+      role="main"
+      aria-label="User profile"
+    >
       <Card className="p-4 sm:w-[350px] w-[300px]">
         <CardContent className="space-y-4">
-          <div className="flex justify-center mb-4" role="img" aria-label="Profile picture">
+          <div
+            className="flex justify-center mb-4"
+            role="img"
+            aria-label="Profile picture"
+          >
             {user?.image ? (
               <img
                 src={user.image}
@@ -100,7 +111,10 @@ const Profile = () => {
                 className="w-24 h-24 rounded-full object-cover"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center" aria-hidden="true">
+              <div
+                className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center"
+                aria-hidden="true"
+              >
                 <User className="w-12 h-12 text-gray-500" />
               </div>
             )}
@@ -117,7 +131,9 @@ const Profile = () => {
             <Label htmlFor="email" className="text-xl font-semibold">
               Email
             </Label>
-            <h2 id="email" className="text-gray-600">{user?.email || "Not provided"}</h2>
+            <h2 id="email" className="text-gray-600">
+              {user?.email || "Not provided"}
+            </h2>
           </div>
         </CardContent>
         <CardFooter className="mt-2">

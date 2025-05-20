@@ -8,6 +8,7 @@ import "./index.css";
 import Dashboard from "./components/pages/dashboard/index.tsx";
 import Profile from "./components/pages/profile/index.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import TenantProfile from "./components/pages/tenant-profile/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute requireAuth={true}>
         <Profile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/tenant-profile/:tenantId",
+    element: (
+      <ProtectedRoute requireAuth={true}>
+        <TenantProfile />
       </ProtectedRoute>
     ),
   },

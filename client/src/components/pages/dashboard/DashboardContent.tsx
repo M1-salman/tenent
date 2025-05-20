@@ -13,6 +13,7 @@ import { User } from "lucide-react";
 import CreateTenantForm from "./createTenantForm";
 import SelectTenantDialog from "./SelectTenantDialog";
 import GenerateBillForm from "./GenerateBillForm";
+import { Link } from "react-router-dom";
 
 interface Tenant {
   tenantId: string;
@@ -30,31 +31,39 @@ interface Tenant {
 
 export default function DashboardContent() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [totalTenants, setTotalTenants] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isSelectTenantDialogOpen, setIsSelectTenantDialogOpen] = useState(false);
+  const [isSelectTenantDialogOpen, setIsSelectTenantDialogOpen] =
+    useState(false);
   const [isGenerateBillFormOpen, setIsGenerateBillFormOpen] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
   useEffect(() => {
-    const fetchTenants = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/tenant/get", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        const token = localStorage.getItem("token");
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        // Fetch tenants
+        const tenantsResponse = await fetch("http://localhost:3000/api/tenant/get", {
+          headers,
         });
-        if (!response.ok) throw new Error("Failed to fetch tenants");
-        const data = await response.json();
-        setTenants(data.data);
+        if (!tenantsResponse.ok) throw new Error("Failed to fetch tenants");
+        const tenantsData = await tenantsResponse.json();
+        setTenants(tenantsData.data);
+        setTotalTenants(tenantsData.count);
       } catch (error) {
-        console.error("Error fetching tenants:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
+  
     };
 
-    fetchTenants();
+    fetchData();
   }, []);
 
   const handleTenantSelect = (tenant: Tenant) => {
@@ -64,8 +73,15 @@ export default function DashboardContent() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen" role="status" aria-label="Loading tenants">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900" aria-hidden="true"></div>
+      <div
+        className="flex justify-center items-center min-h-screen"
+        role="status"
+        aria-label="Loading tenants"
+      >
+        <div
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"
+          aria-hidden="true"
+        ></div>
         <span className="sr-only">Loading tenants...</span>
       </div>
     );
@@ -75,7 +91,14 @@ export default function DashboardContent() {
     <>
       <Card className="mx-14 mb-14">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Tenants Overview</CardTitle>
+          <div>
+            <CardTitle>Tenants Overview</CardTitle>
+            {totalTenants > 0 && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Total Tenants: {totalTenants}
+              </p>
+            )}
+          </div>
           <div className="flex gap-2">
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
@@ -116,14 +139,20 @@ export default function DashboardContent() {
                           aria-hidden="true"
                         />
                       ) : (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted" aria-hidden="true">
+                        <div
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-muted"
+                          aria-hidden="true"
+                        >
                           <User className="h-4 w-4" />
                         </div>
                       )}
                       <div>
-                        <div className="font-medium">
+                        <Link
+                          to={`/tenant-profile/${tenant.tenantId}`}
+                          className="font-medium hover:text-blue-500"
+                        >
                           {tenant.firstName} {tenant.lastName}
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   </TableCell>
@@ -153,7 +182,11 @@ export default function DashboardContent() {
               ))}
               {tenants.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-6" aria-live="polite">
+                  <TableCell
+                    colSpan={4}
+                    className="text-center py-6"
+                    aria-live="polite"
+                  >
                     No tenants found. Create your first tenant to get started.
                   </TableCell>
                 </TableRow>
