@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { User, Download } from "lucide-react";
 import CreateTenantForm from "./createTenantForm";
 import SelectTenantDialog from "./SelectTenantDialog";
 import GenerateBillForm from "./GenerateBillForm";
 import { Link } from "react-router-dom";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface Tenant {
   tenantId: string;
@@ -27,6 +29,8 @@ interface Tenant {
   perUnit?: number;
   totalRooms: number;
   advance: number;
+  startDate?: string;
+  endDate?: string;
 }
 
 export default function DashboardContent() {
@@ -71,6 +75,77 @@ export default function DashboardContent() {
     setIsGenerateBillFormOpen(true);
   };
 
+  const handleExportToPDF = () => {
+    // Create PDF in landscape mode for better fit
+    const doc = new jsPDF('l', 'mm', 'a4');
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text('Tenants List', 14, 15);
+    
+    // Add date
+    doc.setFontSize(10);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
+
+    // Prepare table data
+    const tableData = tenants.map(tenant => [
+      `${tenant.firstName} ${tenant.lastName}`,
+      tenant.email,
+      tenant.phoneNumber,
+      `Rs. ${tenant.monthlyRent}`,
+      tenant.totalRooms.toString(),
+      `Rs. ${tenant.advance}`,
+      tenant.startDate ? new Date(tenant.startDate).toLocaleDateString() : 'Not specified',
+      tenant.endDate ? new Date(tenant.endDate).toLocaleDateString() : 'Active',
+      tenant.fix ? `Fixed: Rs. ${tenant.fix}` : tenant.perUnit ? `Per Unit: Rs. ${tenant.perUnit}` : 'No electricity plan chosen'
+    ]);
+
+    // Create table
+    autoTable(doc, {
+      head: [['Name', 'Email', 'Phone', 'Monthly Rent', 'Total Rooms', 'Advance', 'Start Date', 'End Date', 'Electricity']],
+      body: tableData,
+      startY: 30,
+      theme: 'grid',
+      styles: {
+        fontSize: 8,
+        cellPadding: 2,
+        overflow: 'linebreak',
+        cellWidth: 'wrap',
+      },
+      headStyles: {
+        fillColor: [181, 147, 255],
+        textColor: 255,
+        fontSize: 9,
+        fontStyle: 'bold',
+        halign: 'center',
+      },
+      columnStyles: {
+        0: { cellWidth: 25 }, // Name
+        1: { cellWidth: 40 }, // Email
+        2: { cellWidth: 30 }, // Phone
+        3: { cellWidth: 30 }, // Monthly Rent
+        4: { cellWidth: 15 }, // Total Rooms
+        5: { cellWidth: 20 }, // Advance
+        6: { cellWidth: 20 }, // Start Date
+        7: { cellWidth: 20 }, // End Date
+        8: { cellWidth: 35 }, // Electricity
+      },
+      margin: { left: 10, right: 10 },
+      didDrawPage: function(data) {
+        // Add page numbers
+        doc.setFontSize(8);
+        doc.text(
+          `Page ${data.pageNumber}`,
+          data.settings.margin.left,
+          doc.internal.pageSize.height - 10
+        );
+      }
+    });
+
+    // Save the PDF
+    doc.save('tenants-list.pdf');
+  };
+
   if (loading) {
     return (
       <div
@@ -113,6 +188,14 @@ export default function DashboardContent() {
               aria-label="Generate bill for tenant"
             >
               Generate Bill
+            </Button>
+            <Button
+              onClick={handleExportToPDF}
+              className="bg-[#b593ff] hover:bg-[#d3c0fc]"
+              aria-label="Export tenants to PDF"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export Tenants
             </Button>
           </div>
         </CardHeader>
