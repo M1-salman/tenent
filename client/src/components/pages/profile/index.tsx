@@ -140,8 +140,8 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Card className="py-10 sm:w-[350px] w-[300px]">
+      <div className="flex justify-center items-center min-h-screen ">
+        <Card className="py-10 sm:w-[350px] w-[300px] bg-[#f7f8fa]">
           <CardHeader className="flex justify-center">
             <FormError message={error} />
           </CardHeader>
@@ -161,7 +161,7 @@ const Profile = () => {
       role="main"
       aria-label="User profile"
     >
-      <Card className="p-4 sm:w-[350px] w-[300px]">
+      <Card className="p-4 sm:w-[350px] w-[300px] bg-[#f7f8fa]">
         <CardContent className="space-y-4">
           <div
             className="flex justify-center mb-4 relative group cursor-pointer"

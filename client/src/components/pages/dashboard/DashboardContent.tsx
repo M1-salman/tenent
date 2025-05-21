@@ -164,7 +164,7 @@ export default function DashboardContent() {
 
   return (
     <>
-      <Card className="mx-14 mb-14">
+      <Card className="mx-14 mb-14 bg-[#f7f8fa]">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Tenants Overview</CardTitle>

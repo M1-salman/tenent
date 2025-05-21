@@ -134,7 +134,7 @@ export default function TenantProfile() {
 
   return (
     <div className="p-6 space-y-6">
-      <Card>
+      <Card className="bg-[#f7f8fa]">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Tenant Profile</CardTitle>
           <div className="flex gap-2" role="toolbar" aria-label="Tenant actions">
@@ -149,7 +149,7 @@ export default function TenantProfile() {
                   Edit
                 </Button>
               </DialogTrigger>
-              <DialogContent aria-labelledby="edit-tenant-title">
+              <DialogContent aria-labelledby="edit-tenant-title" className="bg-[#f7f8fa]">
                 <h2 id="edit-tenant-title" className="sr-only">Edit Tenant Information</h2>
                 <CreateTenantForm
                   initialData={tenant}
@@ -245,7 +245,7 @@ export default function TenantProfile() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-[#f7f8fa]">
         <CardHeader>
           <CardTitle id="billing-history">Billing History</CardTitle>
         </CardHeader>
@@ -308,7 +308,7 @@ export default function TenantProfile() {
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className="bg-[#f7f8fa]">
                             <GenerateBillForm
                               initialData={selectedBill}
                               onClose={() => {

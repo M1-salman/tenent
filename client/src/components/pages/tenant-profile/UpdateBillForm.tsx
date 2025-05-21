@@ -108,7 +108,7 @@ export default function GenerateBillForm({ initialData, onClose, isEdit = false 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" role="form" aria-label="Bill generation form">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-[#f7f8fa]" role="form" aria-label="Bill generation form">
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">

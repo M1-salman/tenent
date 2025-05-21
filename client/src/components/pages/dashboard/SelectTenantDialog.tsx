@@ -86,7 +86,7 @@ export default function SelectTenantDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto"
+        className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto bg-[#f7f8fa]"
         aria-labelledby="select-tenant-title"
         role="dialog"
         aria-modal="true"

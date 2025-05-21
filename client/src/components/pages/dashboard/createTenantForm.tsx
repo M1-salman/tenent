@@ -114,7 +114,7 @@ export default function CreateTenantForm({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto bg-[#f7f8fa]">
         <DialogHeader className="pb-4">
           <DialogTitle className="flex items-center justify-between">
             Create New Tenant
