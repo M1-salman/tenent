@@ -20,41 +20,14 @@ export async function registerUser(req, res) {
 
     payload.password = await bcrypt.hash(payload.password, 10);
 
-    // Use transaction to create user and update total count
-    const result = await prisma.$transaction(async (tx) => {
+    
       // Create the user
-      const user = await tx.user.create({
-        data: payload,
-      });
-
-      // Get the current total users record or create if it doesn't exist
-      let totalUsers = await tx.totalUsers.findFirst();
-      
-      if (!totalUsers) {
-        // Create initial record if it doesn't exist
-        totalUsers = await tx.totalUsers.create({
-          data: {
-            count: 1
-          }
-        });
-      } else {
-        // Increment the count
-        totalUsers = await tx.totalUsers.update({
-          where: { id: totalUsers.id },
-          data: {
-            count: {
-              increment: 1
-            }
-          }
-        });
-      }
-
-      return { user, totalUsers };
+    const user = await prisma.user.create({
+      data: payload,
     });
 
     return res.status(200).json({ 
       success: "User created successfully!",
-      totalUsers: result.totalUsers.count 
     });
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {

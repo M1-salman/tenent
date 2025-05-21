@@ -12,17 +12,17 @@ import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { CardWrapper } from "./CardWrapper";
+import { CardWrapper } from "../auth/CardWrapper";
 import { useTransition, useState } from "react";
-
 import { FormError } from "@/components/FormError";
-import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+interface AdminLoginProps {
+  onLoginSuccess: () => void;
+}
+
+const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
-
-  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -54,7 +54,9 @@ const LoginForm = () => {
 
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+                
+        // Trigger parent component to recheck admin status
+        onLoginSuccess();
       } catch (error) {
         setError("Something went wrong!");
       }
@@ -64,9 +66,9 @@ const LoginForm = () => {
   return (
     <div className="flex justify-center items-center min-h-screen pt-6">
       <CardWrapper
-        headerTitle="Welcome Back"
-        backButtonLabel="Don't have an account?"
-        backButtonHref="/auth/register"
+        headerTitle="Admin Login"
+        backButtonLabel=""
+        backButtonHref="/"
       >
         <Form {...form}>
           <form
@@ -168,4 +170,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default AdminLogin;

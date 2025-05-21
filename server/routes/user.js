@@ -6,6 +6,11 @@ import upload from "../middleware/multerConfig.js";
 const router = Router();
 
 router.get("/profile", jwtAuthMiddleware, getProfile);
-router.post("/upload-profile", jwtAuthMiddleware, upload.single("profileImage"), uploadProfile);
+router.post(
+  "/upload-profile",
+  jwtAuthMiddleware,
+  upload.single("profileImage"),
+  uploadProfile
+);
 
 export default router;

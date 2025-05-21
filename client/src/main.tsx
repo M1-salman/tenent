@@ -10,6 +10,7 @@ import Profile from "./components/pages/profile/index.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import TenantProfile from "./components/pages/tenant-profile/index.tsx";
 import { Toaster } from "sonner";
+import Admin from "./components/pages/admin/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
         <TenantProfile />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
 ]);
 
