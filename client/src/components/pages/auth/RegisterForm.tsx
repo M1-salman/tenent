@@ -55,7 +55,6 @@ const RegisterForm = () => {
 
         const data = await response.json();
 
-
         if (!response.ok) {
           setError(data.error || "Something went wrong!");
           return;
@@ -78,12 +77,16 @@ const RegisterForm = () => {
     <div className="flex justify-center items-center min-h-screen pt-6">
       <CardWrapper
         headerTitle="Register"
-        showSocial
         backButtonLabel="Already have an account?"
         backButtonHref="/auth/login"
       >
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" role="form" aria-label="Registration form">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+            role="form"
+            aria-label="Registration form"
+          >
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -178,7 +181,9 @@ const RegisterForm = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+                    <FormLabel htmlFor="confirmPassword">
+                      Confirm Password
+                    </FormLabel>
                     <FormControl>
                       <Input
                         id="confirmPassword"
@@ -201,7 +206,11 @@ const RegisterForm = () => {
               disabled={isPending}
               type="submit"
               className="p-[3px] relative font-semibold bg-[#b593ff] hover:bg-[#d3c0fc] rounded-[5px] w-full h-11"
-              aria-label={isPending ? "Registering your account..." : "Register your account"}
+              aria-label={
+                isPending
+                  ? "Registering your account..."
+                  : "Register your account"
+              }
             >
               {!isPending ? "Register →" : "Registering..."}
             </Button>

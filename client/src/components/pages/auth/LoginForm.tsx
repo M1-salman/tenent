@@ -55,7 +55,6 @@ const LoginForm = () => {
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
-
       } catch (error) {
         setError("Something went wrong!");
       }
@@ -66,19 +65,25 @@ const LoginForm = () => {
     <div className="flex justify-center items-center min-h-screen pt-6">
       <CardWrapper
         headerTitle="Welcome Back"
-        showSocial
         backButtonLabel="Don't have an account?"
         backButtonHref="/auth/register"
       >
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" role="form" aria-label="Login form">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+            role="form"
+            aria-label="Login form"
+          >
             <div className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="email" className="text-sm font-medium">Email</FormLabel>
+                    <FormLabel htmlFor="email" className="text-sm font-medium">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <Input
                         id="email"
@@ -101,7 +106,10 @@ const LoginForm = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="password" className="text-sm font-medium">
+                    <FormLabel
+                      htmlFor="password"
+                      className="text-sm font-medium"
+                    >
                       Password
                     </FormLabel>
                     <FormControl>
