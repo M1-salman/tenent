@@ -5,10 +5,11 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 import { Label } from "@radix-ui/react-label";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { User } from "lucide-react";
+import { User, Pencil } from "lucide-react";
 import { FormError } from "@/components/FormError";
 
 interface UserData {
@@ -22,6 +23,8 @@ const Profile = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +69,67 @@ const Profile = () => {
     navigate("/auth/login");
   };
 
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.match(/^image\/(jpeg|jpg)$/)) {
+      toast.error("Please upload a JPG/JPEG image only");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size should be less than 5MB");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("profileImage", file);
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login to upload profile picture");
+        return;
+      }
+
+      toast.promise(
+        fetch("http://localhost:3000/api/user/upload-profile", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }).then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Failed to upload profile picture");
+          }
+          const data = await response.json();
+          setUser((prev) => (prev ? { ...prev, image: data.imageUrl } : null));
+          return data;
+        }),
+        {
+          loading: "Uploading profile picture...",
+          success: "Profile picture updated successfully!",
+          error: "Failed to upload profile picture"
+        }
+      );
+    } catch (error) {
+      toast.error("Failed to upload profile picture. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -100,9 +164,10 @@ const Profile = () => {
       <Card className="p-4 sm:w-[350px] w-[300px]">
         <CardContent className="space-y-4">
           <div
-            className="flex justify-center mb-4"
+            className="flex justify-center mb-4 relative group cursor-pointer"
             role="img"
             aria-label="Profile picture"
+            onClick={handleImageClick}
           >
             {user?.image ? (
               <img
@@ -118,7 +183,22 @@ const Profile = () => {
                 <User className="w-12 h-12 text-gray-500" />
               </div>
             )}
+            <div className="absolute top-1 right-22 bg-white rounded-full p-1 shadow-md border border-gray-200">
+              <Pencil className="w-4 h-4 text-gray-600" />
+            </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".jpg,.jpeg"
+              className="hidden"
+            />
           </div>
+          {isUploading && (
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          )}
           <div className="space-y-1">
             <Label htmlFor="name" className="text-xl font-semibold">
               Name

@@ -9,6 +9,7 @@ import Dashboard from "./components/pages/dashboard/index.tsx";
 import Profile from "./components/pages/profile/index.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import TenantProfile from "./components/pages/tenant-profile/index.tsx";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <Toaster position="top-right" richColors />
     <RouterProvider router={router} />
   </StrictMode>
 );
