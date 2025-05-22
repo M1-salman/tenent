@@ -26,6 +26,8 @@ const RegisterForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -43,11 +45,9 @@ const RegisterForm = () => {
 
     startTransition(async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/auth/register",
-          {
-            method: "POST",
-            headers: {
+        const response = await fetch(`${serverUrl}/api/auth/register`, {
+          method: "POST",
+          headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(values),

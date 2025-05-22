@@ -43,6 +43,8 @@ export default function DashboardContent() {
   const [isGenerateBillFormOpen, setIsGenerateBillFormOpen] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,12 +54,9 @@ export default function DashboardContent() {
         };
 
         // Fetch tenants
-        const tenantsResponse = await fetch(
-          "http://localhost:3000/api/tenant/get",
-          {
-            headers,
-          }
-        );
+        const tenantsResponse = await fetch(`${serverUrl}/api/tenant/get`, {
+          headers,
+        });
         if (!tenantsResponse.ok) throw new Error("Failed to fetch tenants");
         const tenantsData = await tenantsResponse.json();
         setTenants(tenantsData.data);

@@ -6,13 +6,15 @@ export const DashboardNav = () => {
   const navRef = useRef<HTMLElement>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:3000/api/user/profile", {
+        const response = await fetch(`${serverUrl}/api/user/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

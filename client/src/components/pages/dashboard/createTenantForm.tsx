@@ -41,6 +41,8 @@ export default function CreateTenantForm({
   const [electricityType, setElectricityType] =
     useState<ElectricityType>("none");
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   // Handle dialog close by clearing success message
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -86,7 +88,7 @@ export default function CreateTenantForm({
     };
 
     try {
-      const response = await fetch("http://localhost:3000/api/tenant/create", {
+      const response = await fetch(`${serverUrl}/api/tenant/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

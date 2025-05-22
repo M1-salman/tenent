@@ -32,6 +32,8 @@ export default function CreateTenantForm({ initialData, onClose, isEdit = false 
     endDate: '',
   });
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -62,8 +64,8 @@ export default function CreateTenantForm({ initialData, onClose, isEdit = false 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const url = isEdit
-      ? `http://localhost:3000/api/tenant/update/${initialData.tenantId}`
-      : 'http://localhost:3000/api/tenant/create';
+      ? `${serverUrl}/api/tenant/update/${initialData.tenantId}`
+      : `${serverUrl}/api/tenant/create`;
 
     try {
       const response = await fetch(url, {

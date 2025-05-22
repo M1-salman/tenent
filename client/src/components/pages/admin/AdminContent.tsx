@@ -10,20 +10,19 @@ export default function AdminContent() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch(
-          "http://localhost:3000/api/admin/total-users",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${serverUrl}/api/admin/total-users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch stats");
@@ -60,7 +59,9 @@ export default function AdminContent() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold pb-1">{stats?.totalUsers || 0}</div>
+            <div className="text-2xl font-bold pb-1">
+              {stats?.totalUsers || 0}
+            </div>
             <p className="text-xs text-muted-foreground">
               Total registered users in the system
             </p>

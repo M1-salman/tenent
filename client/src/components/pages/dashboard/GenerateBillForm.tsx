@@ -51,6 +51,8 @@ export default function GenerateBillForm({
   const [success, setSuccess] = useState<string | undefined>("");
   const [total, setTotal] = useState(0);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   // Handle dialog close by clearing success message
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -122,11 +124,9 @@ export default function GenerateBillForm({
           : new Date(values.endDate).toISOString().split('T')[0]
       };
 
-      const response = await fetch(
-        "http://localhost:3000/api/tenant/generate-bill",
-        {
-          method: "POST",
-          headers: {
+      const response = await fetch(`${serverUrl}/api/tenant/generate-bill`, {
+        method: "POST",
+        headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

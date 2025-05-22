@@ -25,7 +25,10 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const navigate = useNavigate();
+
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -37,7 +40,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:3000/api/user/profile", {
+        const response = await fetch(`${serverUrl}/api/user/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -103,7 +106,7 @@ const Profile = () => {
       }
 
       toast.promise(
-        fetch("http://localhost:3000/api/user/upload-profile", {
+        fetch(`${serverUrl}/api/user/upload-profile`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

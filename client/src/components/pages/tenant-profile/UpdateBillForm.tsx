@@ -33,6 +33,8 @@ export default function GenerateBillForm({ initialData, onClose, isEdit = false 
     billType: '',
   });
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -77,8 +79,8 @@ export default function GenerateBillForm({ initialData, onClose, isEdit = false 
     }
 
     const url = isEdit
-      ? `http://localhost:3000/api/tenant/update-bill/${initialData.billId}`
-      : 'http://localhost:3000/api/tenant/generate-bill';
+      ? `${serverUrl}/api/tenant/update-bill/${initialData.billId}`
+      : `${serverUrl}/api/tenant/generate-bill`;
 
     try {
       const response = await fetch(url, {
@@ -162,8 +164,8 @@ export default function GenerateBillForm({ initialData, onClose, isEdit = false 
               <SelectValue placeholder="Select bill type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="final">Final</SelectItem>
+              <SelectItem value="Monthly">Monthly</SelectItem>
+              <SelectItem value="Final">Final</SelectItem>
             </SelectContent>
           </Select>
           {errors.billType && (

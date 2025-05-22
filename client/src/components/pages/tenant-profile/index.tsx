@@ -52,6 +52,8 @@ export default function TenantProfile() {
   const [isEditBillOpen, setIsEditBillOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
     fetchTenantData();
     fetchBills();
@@ -60,7 +62,7 @@ export default function TenantProfile() {
   const fetchTenantData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/tenant/${tenantId}`
+        `${serverUrl}/api/tenant/${tenantId}`
       );
       const data = await response.json();
       setTenant(data.data);
@@ -72,7 +74,7 @@ export default function TenantProfile() {
   const fetchBills = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/tenant/get-bill/${tenantId}`
+        `${serverUrl}/api/tenant/get-bill/${tenantId}`
       );
       const data = await response.json();
       setBills(data.data);
@@ -85,7 +87,7 @@ export default function TenantProfile() {
     if (window.confirm("Are you sure you want to delete this tenant?")) {
       try {
         const token = localStorage.getItem('token');
-        await fetch(`http://localhost:3000/api/tenant/delete/${tenantId}`, {
+        await fetch(`${serverUrl}/api/tenant/delete/${tenantId}`, {
           method: "DELETE",
           headers: {
             'Authorization': `Bearer ${token}`
@@ -101,7 +103,7 @@ export default function TenantProfile() {
   const handleDeleteBill = async (billId: string) => {
     if (window.confirm("Are you sure you want to delete this bill?")) {
       try {
-        await fetch(`http://localhost:3000/api/tenant/delete-bill/${billId}`, {
+        await fetch(`${serverUrl}/api/tenant/delete-bill/${billId}`, {
           method: "DELETE",
         });
         fetchBills();

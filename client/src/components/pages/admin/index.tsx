@@ -7,6 +7,8 @@ const AdminAuthCheck = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   const checkAdminStatus = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
@@ -17,14 +19,11 @@ const AdminAuthCheck = () => {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:3000/api/admin/check-admin",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${serverUrl}/api/admin/check-admin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
 
