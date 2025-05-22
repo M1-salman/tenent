@@ -8,10 +8,12 @@ import tenantRoutes from "./routes/tenant.js";
 import adminRoutes from "./routes/admin.js";
 
 // CORS configuration
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: `${process.env.FRONTEND_SERVER_URL}`,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
