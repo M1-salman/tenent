@@ -183,7 +183,7 @@ const Profile = () => {
                 <User className="w-12 h-12 text-gray-500" />
               </div>
             )}
-            <div className="absolute top-1 right-22 bg-white rounded-full p-1 shadow-md border border-gray-200">
+            <div className="absolute sm:top-1 sm:right-22 top-2 right-16 bg-white rounded-full p-1 shadow-md border border-gray-200">
               <Pencil className="w-4 h-4 text-gray-600" />
             </div>
             <input

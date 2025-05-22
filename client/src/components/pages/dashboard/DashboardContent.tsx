@@ -14,8 +14,8 @@ import CreateTenantForm from "./createTenantForm";
 import SelectTenantDialog from "./SelectTenantDialog";
 import GenerateBillForm from "./GenerateBillForm";
 import { Link } from "react-router-dom";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface Tenant {
   tenantId: string;
@@ -52,9 +52,12 @@ export default function DashboardContent() {
         };
 
         // Fetch tenants
-        const tenantsResponse = await fetch("http://localhost:3000/api/tenant/get", {
-          headers,
-        });
+        const tenantsResponse = await fetch(
+          "http://localhost:3000/api/tenant/get",
+          {
+            headers,
+          }
+        );
         if (!tenantsResponse.ok) throw new Error("Failed to fetch tenants");
         const tenantsData = await tenantsResponse.json();
         setTenants(tenantsData.data);
@@ -64,7 +67,6 @@ export default function DashboardContent() {
       } finally {
         setLoading(false);
       }
-  
     };
 
     fetchData();
@@ -77,47 +79,65 @@ export default function DashboardContent() {
 
   const handleExportToPDF = () => {
     // Create PDF in landscape mode for better fit
-    const doc = new jsPDF('l', 'mm', 'a4');
-    
+    const doc = new jsPDF("l", "mm", "a4");
+
     // Add title
     doc.setFontSize(16);
-    doc.text('Tenants List', 14, 15);
-    
+    doc.text("Tenants List", 14, 15);
+
     // Add date
     doc.setFontSize(10);
     doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
 
     // Prepare table data
-    const tableData = tenants.map(tenant => [
+    const tableData = tenants.map((tenant) => [
       `${tenant.firstName} ${tenant.lastName}`,
       tenant.email,
       tenant.phoneNumber,
       `Rs. ${tenant.monthlyRent}`,
       tenant.totalRooms.toString(),
       `Rs. ${tenant.advance}`,
-      tenant.startDate ? new Date(tenant.startDate).toLocaleDateString() : 'Not specified',
-      tenant.endDate ? new Date(tenant.endDate).toLocaleDateString() : 'Active',
-      tenant.fix ? `Fixed: Rs. ${tenant.fix}` : tenant.perUnit ? `Per Unit: Rs. ${tenant.perUnit}` : 'No electricity plan chosen'
+      tenant.startDate
+        ? new Date(tenant.startDate).toLocaleDateString()
+        : "Not specified",
+      tenant.endDate ? new Date(tenant.endDate).toLocaleDateString() : "Active",
+      tenant.fix
+        ? `Fixed: Rs. ${tenant.fix}`
+        : tenant.perUnit
+        ? `Per Unit: Rs. ${tenant.perUnit}`
+        : "No electricity plan chosen",
     ]);
 
     // Create table
     autoTable(doc, {
-      head: [['Name', 'Email', 'Phone', 'Monthly Rent', 'Total Rooms', 'Advance', 'Start Date', 'End Date', 'Electricity']],
+      head: [
+        [
+          "Name",
+          "Email",
+          "Phone",
+          "Monthly Rent",
+          "Total Rooms",
+          "Advance",
+          "Start Date",
+          "End Date",
+          "Electricity",
+        ],
+      ],
       body: tableData,
       startY: 30,
-      theme: 'grid',
+      theme: "grid",
       styles: {
         fontSize: 8,
         cellPadding: 2,
-        overflow: 'linebreak',
-        cellWidth: 'wrap',
+        overflow: "linebreak",
+        cellWidth: "wrap",
       },
       headStyles: {
         fillColor: [181, 147, 255],
         textColor: 255,
         fontSize: 9,
-        fontStyle: 'bold',
-        halign: 'center',
+        fontStyle: "bold",
+        halign: "center",
       },
       columnStyles: {
         0: { cellWidth: 25 }, // Name
@@ -131,7 +151,7 @@ export default function DashboardContent() {
         8: { cellWidth: 35 }, // Electricity
       },
       margin: { left: 10, right: 10 },
-      didDrawPage: function(data) {
+      didDrawPage: function (data) {
         // Add page numbers
         doc.setFontSize(8);
         doc.text(
@@ -139,11 +159,11 @@ export default function DashboardContent() {
           data.settings.margin.left,
           doc.internal.pageSize.height - 10
         );
-      }
+      },
     });
 
     // Save the PDF
-    doc.save('tenants-list.pdf');
+    doc.save("tenants-list.pdf");
   };
 
   if (loading) {
@@ -165,7 +185,7 @@ export default function DashboardContent() {
   return (
     <>
       <Card className="mx-14 mb-14 bg-[#f7f8fa]">
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex md:flex-row flex-col items-center justify-between">
           <div>
             <CardTitle>Tenants Overview</CardTitle>
             {totalTenants > 0 && (
@@ -174,24 +194,24 @@ export default function DashboardContent() {
               </p>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex sm:flex-row  flex-col gap-2">
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
-              className="bg-[#b593ff] hover:bg-[#d3c0fc]"
+              className="bg-[#b593ff] hover:bg-[#d3c0fc] sm:text-sm text-xs sm:px-4 px-3 sm:py-2 py-1.5 sm:h-10 h-8"
               aria-label="Create new tenant"
             >
               Create Tenant
             </Button>
             <Button
               onClick={() => setIsSelectTenantDialogOpen(true)}
-              className="bg-[#b593ff] hover:bg-[#d3c0fc]"
+              className="bg-[#b593ff] hover:bg-[#d3c0fc] sm:text-sm text-xs sm:px-4 px-3 sm:py-2 py-1.5 sm:h-10 h-8"
               aria-label="Generate bill for tenant"
             >
               Generate Bill
             </Button>
             <Button
               onClick={handleExportToPDF}
-              className="bg-[#b593ff] hover:bg-[#d3c0fc]"
+              className="bg-[#b593ff] hover:bg-[#d3c0fc] sm:text-sm text-xs sm:px-4 px-3 sm:py-2 py-1.5 sm:h-10 h-8"
               aria-label="Export tenants to PDF"
             >
               <Download className="w-4 h-4 mr-2" />

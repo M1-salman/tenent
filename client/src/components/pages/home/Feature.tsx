@@ -4,13 +4,14 @@ interface FeaturesProps {
   rightContent: string;
 }
 
-export default function Feature({ heading, description, rightContent }: FeaturesProps) {
+export default function Feature({
+  heading,
+  description,
+  rightContent,
+}: FeaturesProps) {
   return (
-    <section
-      className="rounded-3xl shadow-lg px-10 py-16"
-      style={{ background: "#f7f8fa" }}
-    >
-      <div className="w-1/2 flex items-center justify-center pl-32">
+    <section className="rounded-3xl px-10 py-16">
+      <div className="lg:w-1/2 w-full flex items-center justify-center lg:pl-32 px-12">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">
             {heading}

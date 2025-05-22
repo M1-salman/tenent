@@ -102,7 +102,7 @@ export default function FeaturesSection() {
     >
       {/* Left: Features stack */}
       <div 
-        className="w-1/2 flex flex-col gap-32 pl-32 py-32"
+        className="lg:w-1/2 w-full flex flex-col gap-32 lg:pl-32 pl-0 py-32"
         role="list"
         aria-label="Feature list"
       >
@@ -135,7 +135,7 @@ export default function FeaturesSection() {
       </div>
       {/* Right: Fixed content with transition */}
       <div
-        className="w-1/2 flex items-center justify-center"
+        className="w-1/2 lg:flex hidden items-center justify-center"
         style={{ position: "sticky", top: 0, height: "120vh" }}
         role="complementary"
         aria-label={`Visualization for ${featuresData[activeIndex].heading}`}

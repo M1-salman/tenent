@@ -16,7 +16,7 @@ import { CardWrapper } from "./CardWrapper";
 import { useTransition, useState } from "react";
 
 import { FormError } from "@/components/FormError";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -63,107 +63,114 @@ const LoginForm = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen pt-6">
-      <CardWrapper
-        headerTitle="Welcome Back"
-        backButtonLabel="Don't have an account?"
-        backButtonHref="/auth/register"
-      >
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
-            role="form"
-            aria-label="Login form"
-          >
-            <div className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        {...field}
-                        disabled={isPending}
-                        placeholder="TylerDurden@gmail.com"
-                        type="email"
-                        autoComplete="email"
-                        className="border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/20 h-11"
-                        aria-required="true"
-                        aria-invalid={!!form.formState.errors.email}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-400 text-xs" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      htmlFor="password"
-                      className="text-sm font-medium"
-                    >
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="password"
-                        placeholder="••••••••"
-                        {...field}
-                        disabled={isPending}
-                        type="password"
-                        autoComplete="current-password"
-                        className="border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/20 h-11"
-                        aria-required="true"
-                        aria-invalid={!!form.formState.errors.password}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-400 text-xs" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormError message={error} />
-
-            <Button
-              disabled={isPending}
-              type="submit"
-              className="p-[3px] relative font-semibold bg-[#b593ff] hover:bg-[#d3c0fc] rounded-[5px] w-full h-11"
-              aria-label={isPending ? "Logging in..." : "Login to your account"}
+      <div className="max-w-md">
+        <Link to="/" className="block mb-8">
+          <h1 className="text-3xl font-bold text-center bg-gradient-to-r from-[#b593ff] to-[#d3c0fc] bg-clip-text text-transparent">
+            Tenent
+          </h1>
+        </Link>
+        <CardWrapper
+          headerTitle="Welcome Back"
+          backButtonLabel="Don't have an account?"
+          backButtonHref="/auth/register"
+        >
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8"
+              role="form"
+              aria-label="Login form"
             >
-              {!isPending ? (
-                <>
-                  Login
-                  <svg
-                    className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </>
-              ) : (
-                "Logging in..."
-              )}
-            </Button>
-          </form>
-        </Form>
-      </CardWrapper>
+              <div className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          {...field}
+                          disabled={isPending}
+                          placeholder="TylerDurden@gmail.com"
+                          type="email"
+                          autoComplete="email"
+                          className="border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/20 h-11"
+                          aria-required="true"
+                          aria-invalid={!!form.formState.errors.email}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="password"
+                        className="text-sm font-medium"
+                      >
+                        Password
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="password"
+                          placeholder="••••••••"
+                          {...field}
+                          disabled={isPending}
+                          type="password"
+                          autoComplete="current-password"
+                          className="border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/20 h-11"
+                          aria-required="true"
+                          aria-invalid={!!form.formState.errors.password}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormError message={error} />
+
+              <Button
+                disabled={isPending}
+                type="submit"
+                className="p-[3px] relative font-semibold bg-[#b593ff] hover:bg-[#d3c0fc] rounded-[5px] w-full h-11"
+                aria-label={isPending ? "Logging in..." : "Login to your account"}
+              >
+                {!isPending ? (
+                  <>
+                    Login
+                    <svg
+                      className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </>
+                ) : (
+                  "Logging in..."
+                )}
+              </Button>
+            </form>
+          </Form>
+        </CardWrapper>
+      </div>
     </div>
   );
 };
