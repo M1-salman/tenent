@@ -183,7 +183,7 @@ export default function DashboardContent() {
 
   return (
     <>
-      <Card className="mx-14 mb-14 bg-[#f7f8fa]">
+      <Card className="sm:mx-14 mx-4 mb-14 bg-[#f7f8fa]">
         <CardHeader className="flex md:flex-row flex-col items-center justify-between">
           <div>
             <CardTitle>Tenants Overview</CardTitle>
