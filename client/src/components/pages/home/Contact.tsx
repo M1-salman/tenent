@@ -28,7 +28,7 @@ export default function Contact() {
               <FaXTwitter />
             </a>
             <a
-              href="https://www.linkedin.com/in/salman-masood917/"
+              href="https://www.linkedin.com/posts/salman-masood917_reactjs-typescript-nodejs-activity-7335657334234324992-f8HC?utm_source=share&utm_medium=member_desktop&rcm=ACoAADd0O6sBeSDVUCn3dtSH_bp5ZA16F8o1lUE"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[#b593ff] transition-colors text-2xl"
