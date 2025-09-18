@@ -7,6 +7,14 @@ import { generateToken } from "../utils/jwt.js";
 
 export async function registerUser(req, res) {
   try {
+    await prisma.$queryRaw`SELECT 1`;
+  } catch (err) {
+    return res.status(503).json({
+      error: "Database is paused, contact: salmanmasood917@gmail.com",
+    });
+  }
+
+  try {
     const body = req.body;
     const validator = vine.compile(RegisterSchema);
     const payload = await validator.validate(body);
@@ -20,13 +28,12 @@ export async function registerUser(req, res) {
 
     payload.password = await bcrypt.hash(payload.password, 10);
 
-    
-      // Create the user
+    // Create the user
     const user = await prisma.user.create({
       data: payload,
     });
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: "User created successfully!",
     });
   } catch (error) {
@@ -39,6 +46,15 @@ export async function registerUser(req, res) {
 }
 
 export async function loginUser(req, res) {
+  console.log("Login request received");
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+  } catch (err) {
+    return res.status(503).json({
+      error: "Database is paused, contact: salmanmasood917@gmail.com",
+    });
+  }
+
   try {
     const body = req.body;
     const validator = vine.compile(LoginSchema);

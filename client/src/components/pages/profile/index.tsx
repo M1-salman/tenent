@@ -144,7 +144,7 @@ const Profile = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen ">
-        <Card className="py-10 sm:w-[350px] w-[300px] bg-[#f7f8fa]">
+        <Card className="py-10 sm:w-[350px] w-[300px]">
           <CardHeader className="flex justify-center">
             <FormError message={error} />
           </CardHeader>
