@@ -50,6 +50,7 @@ export async function loginUser(req, res) {
   try {
     await prisma.$queryRaw`SELECT 1`;
   } catch (err) {
+    console.log(err);
     return res.status(503).json({
       error: "Database is paused, contact: salmanmasood917@gmail.com",
     });
@@ -72,7 +73,7 @@ export async function loginUser(req, res) {
     // Compare entered password with hashed password in database
     const isPasswordValid = await bcrypt.compare(
       payload.password,
-      existingUser.password
+      existingUser.password,
     );
     if (!isPasswordValid) {
       return res.status(400).json({ error: "Password is incorrect" });
